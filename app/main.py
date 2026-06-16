@@ -28,4 +28,4 @@ lifespan=lifespan
 
 @app.get("/health", tags=["시스템"])
 def health():
-    return {"status": "ok"}
+    return {"status": "ok"} #1
