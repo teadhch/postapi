@@ -4,11 +4,12 @@
 # ============================================================
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.database import engine, Base, check_db_connection
 
 from app import models
-from app.models import post   # noqa — Base가 Post 테이블을 인식하려면 반드시 import
+from app.models import post_model   # noqa — Base가 Post 테이블을 인식하려면 반드시 import
 from app.routers.post_router import router as post_router
 
 @asynccontextmanager
@@ -27,6 +28,15 @@ title="게시판 API (MVC)",
 description="FastAPI + MariaDB + SQLAlchemy MVC 패턴",
 version="1.0.0",
 lifespan=lifespan
+)
+
+# CORS 설정: 브라우저(프론트엔드)에서 API를 호출할 수 있게 허용
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(post_router) # 분리된 router 모듈의 APIRouter 객체를 app에 포함
