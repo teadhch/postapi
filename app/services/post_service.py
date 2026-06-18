@@ -10,9 +10,31 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-class PostService :
-    def __init__(self, db:Session):
-        pass
+from app.schemas.post_schema import PostCreate, PostDetail
+from app.repositories.post_repository import PostRepository
+
+class PostService:
+    def __init__(self, db: Session):
+        self.db = db  # DB 세션
+        self.repo = PostRepository(db) # repo 맴버변수에 PostRepository 객체 주입
     
-    def create_post(self) :
-        print("게시판 글 등록!!!! 서비스단!!!!!")
+    def create_post(self, data: PostCreate) -> PostDetail:
+        """
+            게시글 등록을 처리하는 서비스 함수
+        """
+        post = self.repo.insert(title=data.title, content=data.content, author=data.author) 
+        # self.db.commit()
+        print(f"저장된 게시글 : {post.id}")    
+        # post 객체가 PostDetail(Pydantic 객체)에 유효한지 검증한뒤 통과되면 PostDetail 객체 반환  
+        return PostDetail.model_validate(post) 
+
+    def read_post(self, post_id:int):
+        """
+            게시글 조회하는 서비스 함수
+        """
+
+        
+
+
+        
+        
