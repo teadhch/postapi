@@ -25,13 +25,10 @@ def get_post_service(db:Session = Depends(get_db)) -> PostService :
     """
     return PostService(db)
 
-@router.post("",  status_code=201, summary="게시글 등록")
+@router.post("", response_model=PostDetail, status_code=201, summary="게시글 등록")
 def create_post(
     data:PostCreate,
     service:PostService = Depends(get_post_service)
 ) :
-    service.create_post()   # 서비스단의 create_post() 호출
-
-@router.get("")
-def read_post() :
-    pass
+    postDetail = service.create_post(data)   # 서비스단의 create_post() 호출
+    return postDetail
