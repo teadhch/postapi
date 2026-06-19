@@ -50,7 +50,7 @@ class PostService:
         post = self.repo.increment_view_count(post) # 조회수 증가
         return PostDetail.model_validate(post)
     
-    def get_list(self) -> PostListResponse:
+    def get_list(self, page:int, per_page:int) -> PostListResponse:
         """
             게시글 전체 조회
         """
