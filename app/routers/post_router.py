@@ -32,3 +32,11 @@ def create_post(
 ) :
     postDetail = service.create_post(data)   # 서비스단의 create_post() 호출
     return postDetail
+
+@router.get("/{id}", response_model=PostDetail, summary="게시글 상세 조회")
+def get_post(
+    id:int=Path(..., ge=1),
+    service:PostService = Depends(get_post_service)
+) :
+    service.get_post_detail(id)
+    
