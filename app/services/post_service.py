@@ -10,7 +10,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from app.schemas.post_schema import PostCreate, PostDetail
+from app.schemas.post_schema import PostCreate, PostDetail, PostListResponse, PostItem
 from app.repositories.post_repository import PostRepository
 
 class PostService:
@@ -49,4 +49,12 @@ class PostService:
         post = self._get_or_404(id) # id번 글 조회
         post = self.repo.increment_view_count(post) # 조회수 증가
         return PostDetail.model_validate(post)
-        
+    
+    def get_list(self) -> PostListResponse:
+        """
+            게시글 전체 조회
+        """
+        posts = self.repo.get_post_list()   # List[Post] 타입 반환
+        # Repository단에서 반환되는 List[Post]는 Post객체를 List[]에 감싼 타입이다. (json이 아님) => ORM에서 반환되는 기본값.
+        # 그래서 우리는 PostItem(한건의 게시글 json) schema
+        return PostListResponse(posts = [PostItem.model_validate(p) for p in posts])
