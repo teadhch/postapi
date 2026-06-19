@@ -39,3 +39,11 @@ class PostRepository :
         """
         return self.db.get(Post, id)
         
+    def increment_view_count(self, post : Post) -> Post:
+        """
+            id번 게시글의 조회수를 1증가시킨다
+        """
+        post.view_count = post.view_count + 1
+        self.db.commit()    # update 실행, db에 반영
+        self.db.refresh(post)
+        return post
