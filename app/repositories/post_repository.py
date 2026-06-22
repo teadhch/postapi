@@ -48,16 +48,18 @@ class PostRepository :
         self.db.refresh(post)
         return post
     
-    def get_post_list(self) -> List[Post]:
+    def get_post_list(self, offset:int = 0, limit:int = 10) -> List[Post]:
         """
             게시글 전체 목록 반환
+            페이징(offset, limit는 service단에서 계산된 값을 받아서) 처리
         """
-        return self.db.query(Post).all()
-    
+        query = self.db.query(Post)     # "select * from post" 쿼리문 자체
+        # "limit 옵셋, 페이지당출력될행의 수" 를 붙여 실행하여 반환
+        posts = query.offset(offset=offset).limit(limit=limit).all()    
+        return posts
     def get_posts_count(self) -> int :
         """
             게시글의 전체 row수를 반환
         """
         count = self.db.query(func.count(Post.id))
         return count.scalar()   
-    
