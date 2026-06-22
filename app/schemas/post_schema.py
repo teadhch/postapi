@@ -58,7 +58,10 @@ class PagingInfo(BaseModel) :
     has_next: bool  # 다음 페이지 존재 여부
 
 class PostListResponse(BaseModel) :
-    """ PostItem의 리스트 형태 (게시글 전체 조회시 실제 반환되는 json) """
+    """ 
+    PostItem의 리스트 형태 (게시글 전체 조회시 실제 반환되는 json) 
+    게시글 목록 + 페이징 정보
+    """
     posts : List[PostItem]
     page_info:PagingInfo
 
