@@ -97,5 +97,5 @@ class PostService:
 
     # ── 게시글 삭제 ───────────────────────────────────────────
     def delete_post(self, id: int) -> None:
-        post = self._get_or_404(post_id)
-        self.repo.delete(post)    
+        post = self._get_or_404(id)
+        self.repo.delete(id)    
