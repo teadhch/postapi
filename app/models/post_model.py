@@ -23,21 +23,25 @@ class Post(Base):
         onupdate=datetime.now,   # UPDATE 실행 시 자동으로 현재 시각 갱신
         comment="수정 시각"
     )
+    # PostStat 객체를 참조할 용도의 속성
     stat = relationship(
         "PostStat",
         back_populates = "post",
         uselist=False,  # 1대1
         cascade="all, delete-orphan"
     )
+
+    # Attachment 객체를 참조할 용도의 속성
     attachments = relationship(
         "Attachment", 
         back_populates="post",
         uselist=True,   # 1대 다
         cascade="all, delete-orphan"    # 부모 삭제시 첨부파일도 자동 삭제
         )  
+    
 class PostStat(Base):
     __tablename__ = "post_stat"
-    # unique=True -> 1대1 보장 (Post - PostStat의 관계가 1:1)
+    # unique=True -> 1대1 보장 (Post - PostStat의 관계가 1:1) # 요약된정보를 보기위하여 1대1로 뺀다
     id         = Column(Integer, primary_key=True, autoincrement=True)
     post_id    = Column(Integer, ForeignKey("post.id"),
                         unique=True, nullable=False)   # unique=True → 1대1 보장
@@ -46,7 +50,7 @@ class PostStat(Base):
 
     post = relationship(
         "Post",
-        back_populates = "post_stat"
+        back_populates = "stat"
     )
 
 class Attachment(Base):
