@@ -133,7 +133,7 @@ class PostService:
                 title=data.title, content=data.content, author=data.author
             )
             self.repo.create_stat(post.id)
-            filenames=[att for att in data.attachments]
+            filenames=[att.filename for att in data.attachments]
             self.repo.create_attachments(post.id, filenames)
             self.db.commit()
             self.db.refresh(post)
