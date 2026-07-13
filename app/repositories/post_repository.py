@@ -134,7 +134,7 @@ class PostRepository :
 
         if search : # 제목 검색어가 있다면
             # LIKE '%검색어%'
-            query = query.filter(Post.title.like("f%{search}%"))
+            query = query.filter(Post.title.like(f"%{search}%"))
 
         if author : # 작성자 검색어가 있다면
             query = query.filter(Post.author == author)
@@ -157,7 +157,7 @@ class PostRepository :
 
         if search : # 제목 검색어가 있다면
             # LIKE '%검색어%'
-            query = query.filter(Post.title.like("f%{search}%"))
+            query = query.filter(Post.title.like(f"%{search}%"))
 
         if author : # 작성자 검색어가 있다면
             query = query.filter(Post.author == author)
