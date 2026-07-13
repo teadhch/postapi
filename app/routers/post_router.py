@@ -25,7 +25,7 @@ def get_post_service(db:Session = Depends(get_db)) -> PostService :
     """
     return PostService(db)
 
-@router.post("", response_model=PostDetail, status_code=201, summary="게시글 등록")
+@router.post("", response_model=PostDetail, status_code=201, summary="게시글 등록", operation_id="create_post")
 def create_post(
     data:PostCreate,
     service:PostService = Depends(get_post_service)
@@ -33,14 +33,14 @@ def create_post(
     postDetail = service.create_post(data)   # 서비스단의 create_post() 호출
     return postDetail
 
-@router.get("/{id}", response_model=PostDetail, summary="게시글 상세 조회")
+@router.get("/{id}", response_model=PostDetail, summary="게시글 상세 조회", operation_id="get_post")
 def get_post(
     id:int=Path(..., ge=1),
     service:PostService = Depends(get_post_service)
 ) :
     return service.get_post_detail(id)
 
-@router.get("", response_model=PostListResponse, summary="게시글 전체 조회")
+@router.get("", response_model=PostListResponse, summary="게시글 전체 조회", operation_id="list_posts")
 def get_list(
     page:int = Query(1, ge=1, description="페이지번호"),
     per_page: int = Query(10, ge=10, le=100, description="페이지당 항목 수"),
@@ -51,7 +51,7 @@ def get_list(
 ) :
     return service.get_list(page, per_page, search, author, order_by)
 
-@router.put("/{id}", response_model=PostDetail, summary="게시글 수정")
+@router.put("/{id}", response_model=PostDetail, summary="게시글 수정", operation_id="update_post")
 def update_post(
     id: int = Path(..., ge=1),
     data: PostUpdate = ...,
@@ -59,7 +59,7 @@ def update_post(
 ):
     return service.update_post(id, data)
 
-@router.delete("/{id}", status_code=204, summary="게시글 삭제")
+@router.delete("/{id}", status_code=204, summary="게시글 삭제", operation_id="delete_post")
 def delete_post(
     id: int = Path(..., ge=1), # 삭제할 게시글 번호
     service: PostService = Depends(get_post_service),
