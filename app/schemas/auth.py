@@ -20,8 +20,8 @@ class TokenPair(BaseModel) :
     """
     로그인 성공시 반환되는 토큰 한 쌍 (Access + Refresh Token의 쌍)
     """
-    access_token : str,
-    refresh_token : str,
+    access_token : str
+    refresh_token : str
     token_type : str = 'bearer'
 
 class AccessTokenOnly(BaseModel) :
