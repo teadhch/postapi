@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_db
 from app.services.auth_service import AuthService
 from app.schemas.auth import UserCreate, UserInfo, TokenPair
+from app.auth.jwt import get_current_username
 
 # main.py 의 FastAPI에 등록할 분리된 라우터 모듈
 auth_router = APIRouter(prefix="/auth", tags=["인증"])
@@ -30,3 +31,10 @@ def login(
     service : AuthService = Depends(get_auth_service)
 ) :
     return service.login(form_data.username, form_data.password)
+
+@auth_router.get("/me", response_model=UserInfo, summary="내 정보 조회")
+def get_me(
+    username: str = Depends(get_current_username),
+    service : AuthService=Depends(get_auth_service)
+) :
+    return service.get_user_info(username)

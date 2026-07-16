@@ -65,3 +65,12 @@ class AuthService :
             expires_at=generate_refresh_token_expiry()
         )
         return TokenPair(access_token=access_token, refresh_token=refresh_token)
+    
+    def get_user_info(self, username:str) -> UserInfo :
+        """
+        토큰에서 추출한 username으로 사용자 정보를 조회해 반환한다
+        """
+        user = self.user_repo.get_by_username(username=username)
+        if not user :
+            raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다")
+        return UserInfo.model_validate(user)
