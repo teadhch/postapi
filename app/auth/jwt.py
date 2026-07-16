@@ -59,7 +59,7 @@ def generate_refresh_token_expiry() -> datetime :
     리프레시 토큰의 만료일 생성
     """
     # 현재시간 + 7일
-    return datetime.now + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    return datetime.now() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
 
 def get_current_username(token:str=Depends(oauth2_scheme)) -> str :
     """
