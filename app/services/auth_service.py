@@ -18,7 +18,7 @@ from app.schemas.auth import UserCreate, UserInfo, TokenPair
 class AuthService :
     def __init__(self, db: Session):
         self.user_repo = UserRepository(db)
-        self.refresh_repo = RefreshTokenRepository
+        self.refresh_repo = RefreshTokenRepository(db)
         # refresh_repo는 로그인 단계에서 추가합니다
     
     def register(self, data: UserCreate) -> UserInfo:
@@ -48,8 +48,8 @@ class AuthService :
         if not user or not verify_password(password, user.hashed_password) :
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail = "아이디 또는 비밀번호가 올바르지 않습니다"
-                headers = {"WWW-Authorized" : "Bearer"}
+                detail = "아이디 또는 비밀번호가 올바르지 않습니다",
+                headers = {"WWW-Authorized" : "Bearer"},
             )
 
         # 로그인한 사용자의 id(username)을 access_token에 넣어 발급
