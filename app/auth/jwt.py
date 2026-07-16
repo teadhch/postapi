@@ -73,7 +73,9 @@ def get_current_username(token:str=Depends(oauth2_scheme)) -> str :
     )
 
     try:
+        # signature가 위조 되었는지 안 되었는지도 확인
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # payload에서 sub 키값의 username을 찾음
         username = payload.get["sub"]
         if username is None :
             raise credential_exception
