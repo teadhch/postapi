@@ -4,10 +4,11 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.database import get_db
 from app.services.auth_service import AuthService
-from app.schemas.auth import UserCreate, UserInfo
+from app.schemas.auth import UserCreate, UserInfo, TokenPair
 
 # main.py 의 FastAPI에 등록할 분리된 라우터 모듈
 auth_router = APIRouter(prefix="/auth", tags=["인증"])
@@ -21,3 +22,11 @@ def register(
     service: AuthService = Depends(get_auth_service)
 ) :
     return service.register(data)
+
+@auth_router.post("/login", response_model=TokenPair, status_code=200, summary="로그인")
+def login(
+    # Oauth2PasswordRequestForm : username + password를 form데이터로 받음
+    form_data : OAuth2PasswordRequestForm = Depends(), 
+    service : AuthService = Depends(get_auth_service)
+) :
+    return service.login(form_data.username, form_data.password)
