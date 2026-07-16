@@ -15,3 +15,31 @@ class UserInfo(BaseModel):
     username: str
     name:     str
     model_config = {"from_attributes": True}
+
+class TokenPair(BaseModel) :
+    """
+    로그인 성공시 반환되는 토큰 한 쌍 (Access + Refresh Token의 쌍)
+    """
+    access_token : str,
+    refresh_token : str,
+    token_type : str = 'bearer'
+
+class AccessTokenOnly(BaseModel) :
+    """
+    재발급시 응답되는 AccessToken 응답용
+    """
+    access_token: str
+    refresh_token: str
+    token_type: str = 'bearer'
+
+class RefreshRequest(BaseModel) :
+    """
+    Refresh 토큰 요청용
+    """
+    refresh_token : str
+
+class LogoutRequest(BaseModel) :
+    """
+    로그아웃 요청
+    """
+    refresh_token : str
